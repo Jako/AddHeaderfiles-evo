@@ -1,7 +1,7 @@
 <?php
 /*
  * AddHeaderfiles
- * Puts CSS or JS in the head in the body of a document
+ * Adds CSS or JS in a document (at the end of the head or the end of the body)
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
  * Version 0.4 (22. August 2010)
