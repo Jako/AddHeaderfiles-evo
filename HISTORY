@@ -5,3 +5,5 @@
 
 0.3   - Use chunknames in chunks
 0.3.x - bugfixes
+
+0.4   - completely recursive

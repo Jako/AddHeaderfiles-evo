@@ -57,7 +57,7 @@ Fill a chunk (i.e. 'headerSlimbox') like this:
 
 --------------------------------------------------------------------------------
 
-Parts of the addcode parameterchain could point to chunks too (not recursive!).
+Parts of the addcode parameterchain could point to chunks too (recursive!).
 These chunks should contain the complete <style>...</style> or
 <script>...</script> code.
 [!AddHeaderfiles?addcode=`headerSlimbox;/assets/css/test.css|print`!]

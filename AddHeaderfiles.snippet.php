@@ -1,18 +1,20 @@
 <?php
 /*
  * AddHeaderfiles
- * Puts CSS or JS in the head of a document
+ * Puts CSS or JS in the head in the body of a document
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
- * Version 0.3.3 (21. July 2010)
- * Authors: Mithrandir and Jako
+ * Version 0.4 (22. August 2010)
+ * Authors: Jako and Mithrandir
  * See http://www.modxcms.de/forum/comments.php?DiscussionID=926&page=1#Item_4
  * and following posts for details
  *
  * Parameters:
- * &addcode - name(s) of external file(s), script position and css media
- * &sep - separator for styles
- * &sepmed - seperator for medias and script position
+ * &addcode - name(s) of external file(s) or chunkname(s) separated by semicolon
+              these external files can have a position setting or media type 
+              separated by pipe
+ * &sep -     separator for files/chunknames
+ * &sepmed -  seperator for media type or script position
  */
 
 // Options - change default media for css here:
@@ -23,45 +25,52 @@ $sep = (isset($sep)) ? $sep : ';';
 $sepmed = (isset($sepmed)) ? $sepmed : '|';
 $addcode = (isset($addcode)) ? $addcode : '';
 
-// if the list of files is stored in a chunk:
-if($modx->getChunk($addcode)) {
-	$addcode = $modx->getChunk($addcode);
-}
+if(!function_exists('AddHeaderfiles')) {
+	function AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault) {
+		global $modx;
 
-$parts = array();
-if((strpos(strtolower($addcode), '<script') !== false) || (strpos(strtolower($addcode), '<style') !== false)) {
-	$parts[] = $addcode;
-} else {
-	$parts = explode($sep, $addcode);
-}
-
-foreach($parts as $part) {
-	$part = explode($sepmed, $part, 2);
-	if($modx->getChunk($part[0])) {
-		// part of the parameterchain is a chunkname
-		$part[0] = $modx->getChunk($part[0]);
-		if(strpos(strtolower($part[0]), '<style') !== false) {
-			$modx->regClientCSS($part[0]);
+		if((strpos(strtolower($addcode), '<script') !== false) || (strpos(strtolower($addcode), '<style') !== false)) {
+			return $addcode;
 		} else {
-			if($part[1] != 'end') {
-				$modx->regClientStartupScript($part[0]);
-			} else {
-				$modx->regClientScript($part[0]);
-			}
+			$parts = explode($sep, $addcode);
 		}
-	} else {
-		// otherwhise it is treated as a filename
-		if(end(explode('.', $part[0])) == 'css') {
-			$modx->regClientCSS($part[0], ((isset($part[1])) ? $part[1] : $mediadefault));
-		} else {
-			if($part[1] != 'end') {
-				$modx->regClientStartupScript($part[0]);
+		foreach($parts as $part) {
+			$part = explode($sepmed, $part, 2);
+			if($chunk = $modx->getChunk($part[0])) {
+				// part of the parameterchain is a chunkname
+				$part[0] = AddHeaderfiles($chunk, $sep, $sepmed, $mediadefault);
+				if(strpos(strtolower($part[0]), '<style') !== false) {
+					$modx->regClientCSS($part[0]);
+				} else {
+					if($part[1] != 'end') {
+						$modx->regClientStartupScript($part[0]);
+					} else {
+						$modx->regClientScript($part[0]);
+					}
+				}
 			} else {
-				$modx->regClientScript($part[0]);
+				// otherwhise it is treated as a filename
+				if(substr($part[0], -4) == '.css') {
+					$modx->regClientCSS($part[0], (isset($part[1]) ? $part[1] : $mediadefault));
+				} else {
+					if($part[1] != 'end') {
+						$modx->regClientStartupScript($part[0]);
+					} else {
+						$modx->regClientScript($part[0]);
+					}
+				}
 			}
 		}
 	}
 }
 
+if($addcode != '') {
+	$addcode = AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault);
+	if(strpos(strtolower($addcode), '<style') !== false) {
+		$modx->regClientCSS($addcode);
+	} else {
+		$modx->regClientStartupScript($addcode);
+	}
+}
 return "";
 ?>
