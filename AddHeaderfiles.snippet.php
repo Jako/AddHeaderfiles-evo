@@ -4,7 +4,7 @@
  * Adds CSS or JS in a document (at the end of the head or the end of the body)
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
- * Version 0.4 (22. August 2010)
+ * Version 0.4 (27. July 2011)
  * Authors: Jako and Mithrandir
  * See http://www.modxcms.de/forum/comments.php?DiscussionID=926&page=1#Item_4
  * and following posts for details
