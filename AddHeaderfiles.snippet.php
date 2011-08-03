@@ -4,7 +4,7 @@
  * Adds CSS or JS in a document (at the end of the head or the end of the body)
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
- * Version 0.4 (27. July 2011)
+ * Version 0.4.1 (3. August 2011)
  * Authors: Jako and Mithrandir
  * See http://www.modxcms.de/forum/comments.php?DiscussionID=926&page=1#Item_4
  * and following posts for details
@@ -17,8 +17,8 @@
  * &sepmed -  seperator for media type or script position
  */
 
-// Options - change default media for css here:
-$mediadefault = 'screen, tv, projection';
+// Options - change default media type in the snippet properties (look into README)
+$mediadefault = (isset($mediadefault)) ? $mediadefault : 'screen, tv, projection';
 
 // Check Parameters and set them to default values
 $sep = (isset($sep)) ? $sep : ';';

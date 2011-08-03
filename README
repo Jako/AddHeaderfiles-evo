@@ -22,6 +22,16 @@ return include(MODX_BASE_PATH.'assets/snippets/AddHeaderfiles/AddHeaderfiles.sni
 ?>
 
 ================================================================================
+Options:
+================================================================================
+The default media type can be set in the snippet properties if the following 
+line is inserted in the default properties:
+
+&mediadefault=Media default for css files;text;
+
+The default media type can be changed by editing the corresponding line.
+
+================================================================================
 Parameters:
 ================================================================================
  * &addcode - external filenames(s) or chunkname(s) separated by &sep
@@ -30,8 +40,6 @@ Parameters:
  * &sep -     separator for files/chunknames (default ';')
  * &sepmed -  seperator for media type or script position (default '|');
  
-The default media type should be set directly in the snippet code.
-
 ================================================================================
 Examples:
 ================================================================================
