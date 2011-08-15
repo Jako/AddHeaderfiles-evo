@@ -28,14 +28,23 @@ $addcode = (isset($addcode)) ? $addcode : '';
 if(!function_exists('AddHeaderfiles')) {
 	function AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault) {
 		global $modx;
+		
 
 		if((strpos(strtolower($addcode), '<script') !== false) || (strpos(strtolower($addcode), '<style') !== false)) {
+		    if (class_exists('PHxParser')) {
+		        $PHx = new PHxParser();
+		        $addcode = $PHx->Parse($addcode);
+		    }
+		    $addcode = $modx->mergeChunkContent($addcode);
+            $addcode = $modx->evalSnippets($addcode);
+            $addcode = $modx->mergePlaceholderContent($addcode);
+            
 			return $addcode;
 		} else {
 			$parts = explode($sep, $addcode);
 		}
 		foreach($parts as $part) {
-			$part = explode($sepmed, $part, 2);
+			$part = explode($sepmed, trim($part, " \n\r\t"), 2);
 			if($chunk = $modx->getChunk($part[0])) {
 				// part of the parameterchain is a chunkname
 				$part[0] = AddHeaderfiles($chunk, $sep, $sepmed, $mediadefault);
