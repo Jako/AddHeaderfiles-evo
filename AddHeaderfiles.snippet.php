@@ -11,8 +11,8 @@
  *
  * Parameters:
  * &addcode - name(s) of external file(s) or chunkname(s) separated by semicolon
-              these external files can have a position setting or media type 
-              separated by pipe
+ these external files can have a position setting or media type
+ separated by pipe
  * &sep -     separator for files/chunknames
  * &sepmed -  seperator for media type or script position
  */
@@ -25,33 +25,32 @@ $sep = (isset($sep)) ? $sep : ';';
 $sepmed = (isset($sepmed)) ? $sepmed : '|';
 $addcode = (isset($addcode)) ? $addcode : '';
 
-if(!function_exists('AddHeaderfiles')) {
+if (!function_exists('AddHeaderfiles')) {
 	function AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault) {
 		global $modx;
-		
 
-		if((strpos(strtolower($addcode), '<script') !== false) || (strpos(strtolower($addcode), '<style') !== false)) {
-		    if (class_exists('PHxParser')) {
-		        $PHx = new PHxParser();
-		        $addcode = $PHx->Parse($addcode);
-		    }
-		    $addcode = $modx->mergeChunkContent($addcode);
-            $addcode = $modx->evalSnippets($addcode);
-            $addcode = $modx->mergePlaceholderContent($addcode);
-            
+		if ((strpos(strtolower($addcode), '<script') !== false) || (strpos(strtolower($addcode), '<style') !== false)) {
+			if (class_exists('PHxParser')) {
+				$PHx = new PHxParser();
+				$addcode = $PHx->Parse($addcode);
+			}
+			$addcode = $modx->mergeChunkContent($addcode);
+			$addcode = $modx->evalSnippets($addcode);
+			$addcode = $modx->mergePlaceholderContent($addcode);
+
 			return $addcode;
 		} else {
 			$parts = explode($sep, $addcode);
 		}
-		foreach($parts as $part) {
-			$part = explode($sepmed, trim($part, " \n\r\t"), 2);
-			if($chunk = $modx->getChunk($part[0])) {
+		foreach ($parts as $part) {
+			$part = explode($sepmed, trim($part), 2);
+			if ($chunk = $modx->getChunk($part[0])) {
 				// part of the parameterchain is a chunkname
 				$part[0] = AddHeaderfiles($chunk, $sep, $sepmed, $mediadefault);
-				if(strpos(strtolower($part[0]), '<style') !== false) {
+				if (strpos(strtolower($part[0]), '<style') !== false) {
 					$modx->regClientCSS($part[0]);
 				} else {
-					if($part[1] != 'end') {
+					if ($part[1] != 'end') {
 						$modx->regClientStartupScript($part[0]);
 					} else {
 						$modx->regClientScript($part[0]);
@@ -59,10 +58,10 @@ if(!function_exists('AddHeaderfiles')) {
 				}
 			} else {
 				// otherwhise it is treated as a filename
-				if(substr($part[0], -4) == '.css') {
+				if (substr($part[0], -4) == '.css') {
 					$modx->regClientCSS($part[0], (isset($part[1]) ? $part[1] : $mediadefault));
 				} else {
-					if($part[1] != 'end') {
+					if ($part[1] != 'end') {
 						$modx->regClientStartupScript($part[0]);
 					} else {
 						$modx->regClientScript($part[0]);
@@ -71,11 +70,12 @@ if(!function_exists('AddHeaderfiles')) {
 			}
 		}
 	}
+
 }
 
-if($addcode != '') {
+if ($addcode != '') {
 	$addcode = AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault);
-	if(strpos(strtolower($addcode), '<style') !== false) {
+	if (strpos(strtolower($addcode), '<style') !== false) {
 		$modx->regClientCSS($addcode);
 	} else {
 		$modx->regClientStartupScript($addcode);
