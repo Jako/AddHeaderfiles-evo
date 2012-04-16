@@ -42,17 +42,18 @@ Examples:
     [!AddHeaderfiles?addcode=`/manager/media/script/mootools/mootools.js;/assets/js/slimbox.js|end;/assets/css/slimbox.css;/assets/css/test.css|print`!]
 
 shows:
-```
-...
-    <script type="text/javascript" src="/manager/media/script/mootools/mootools.js"></script>
-    <link rel="stylesheet" type="text/css" href="/assets/css/slimbox.css" media="screen, tv, projection" />
-    <link rel="stylesheet" type="text/css" href="/assets/css/test.css" media="print" />
-</head>
-...
-    <script type="text/javascript" src="/assets/js/slimbox.js"></script>
-</body>
+
+    ...
+        <script type="text/javascript" src="/manager/media/script/mootools/mootools.js"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/css/slimbox.css" media="screen, tv, projection" />
+        <link rel="stylesheet" type="text/css" href="/assets/css/test.css" media="print" />
+    </head>
+    ...
+        <script type="text/javascript" src="/assets/js/slimbox.js"></script>
+    </body>
 
 ### Chunk call:
+
 Fill a chunk (i.e. 'headerSlimbox') by:
 
     /assets/js/mootools.js;/assets/js/slimbox.js;/assets/css/slimbox.css
