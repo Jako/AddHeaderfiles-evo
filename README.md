@@ -31,14 +31,16 @@ Parameters:
 Name | Description | Default
 ---- | ----------- | -------
 addcode | external filenames(s) or chunkname(s) separated by &sep these external files can have a position setting or media type separated by &sepmed | -
-sep  | separator for files/chunknames | `;`
-sepmed  |  seperator for media type or script position | `\|`
+sep  | separator for files/chunknames | ;
+sepmed  |  seperator for media type or script position | \|
 
 Examples:
 --------------------------------------------------------------------------------
 
 ### Direct call:
+
     [!AddHeaderfiles?addcode=`/manager/media/script/mootools/mootools.js;/assets/js/slimbox.js|end;/assets/css/slimbox.css;/assets/css/test.css|print`!]
+
 shows:
 ```
 ...
@@ -52,9 +54,11 @@ shows:
 
 ### Chunk call:
 Fill a chunk (i.e. 'headerSlimbox') by:
+
     /assets/js/mootools.js;/assets/js/slimbox.js;/assets/css/slimbox.css
 
 and call it like this:
+
     [!AddHeaderfiles?addcode=`headerSlimbox`!]
 
 Parts of the addcode parameterchain could point to chunks too (recursive).
