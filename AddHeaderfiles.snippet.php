@@ -4,15 +4,18 @@
  * Adds CSS or JS in a document (at the end of the head or the end of the body)
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
- * Version 0.4.1 (3. August 2011)
+ * Version 0.4.2 (4. Juni 2012)
  * Authors: Jako and Mithrandir
  * See http://www.modxcms.de/forum/comments.php?DiscussionID=926&page=1#Item_4
  * and following posts for details
  *
  * Parameters:
  * &addcode - name(s) of external file(s) or chunkname(s) separated by semicolon
- these external files can have a position setting or media type
- separated by pipe
+ * these external files can have a position setting or media type
+ * separated by pipe
+ * '?' in the file url have to be masked as '!q!'
+ * '=' in the file url have to be masked as '!eq!'
+ * '&' in the file url have to be masked as '!and!'
  * &sep -     separator for files/chunknames
  * &sepmed -  seperator for media type or script position
  */
@@ -26,6 +29,7 @@ $sepmed = (isset($sepmed)) ? $sepmed : '|';
 $addcode = (isset($addcode)) ? $addcode : '';
 
 if (!function_exists('AddHeaderfiles')) {
+
 	function AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault) {
 		global $modx;
 
@@ -43,6 +47,8 @@ if (!function_exists('AddHeaderfiles')) {
 			$parts = explode($sep, $addcode);
 		}
 		foreach ($parts as $part) {
+			// unmask masked url parameters
+			$part = str_replace(array('!q!', '!eq!', '!and!'), array('?', '=', '&'), $part);
 			$part = explode($sepmed, trim($part), 2);
 			if ($chunk = $modx->getChunk($part[0])) {
 				// part of the parameterchain is a chunkname
