@@ -6,22 +6,25 @@ for the MODX Evolution content management framework
 
 Features:
 --------------------------------------------------------------------------------
-With this snippet the MODX API functions regClientStartupScript, regClientScript and regClientCSS are used to insert Javascript and
-CSS-Styles at the appropriate positions of the current page
+With this snippet the MODX API functions regClientStartupScript, regClientScript and regClientCSS are used to insert Javascript and CSS-Styles at the appropriate positions of the current page
   
 Installation:
 --------------------------------------------------------------------------------
 Upload the 'AddHeaderfiles' folder to 'assets/snippets' and create a snippet called AddHeaderfiles with the following code
 
-    `<?php
-    return include(MODX_BASE_PATH.'assets/snippets/AddHeaderfiles/AddHeaderfiles.snippet.php');
-    ?>`
+```php
+<?php
+return include(MODX_BASE_PATH.'assets/snippets/AddHeaderfiles/AddHeaderfiles.snippet.php');
+?>
+```
 
 Options:
 --------------------------------------------------------------------------------
 The default media type can be set in the snippet properties if the following code is inserted snippet call:
 
-    `&mediadefault=Media default for css files;text;`
+```
+&mediadefault=Media default for css files;text;
+```
 
 The default media type can be changed by editing the corresponding line in the snippet code.
 
@@ -30,7 +33,7 @@ Parameters:
 
 Name | Description | Default
 ---- | ----------- | -------
-addcode | external filenames(s) or chunkname(s) separated by &sep these external files can have a position setting or media type separated by &sepmed, see note 1 | -
+addcode | external filenames(s) or chunkname(s) separated by &sep. The external files can have a position setting or media type separated by &sepmed, see note 1 | -
 sep  | separator for files/chunknames | ;
 sepmed  |  seperator for media type or script position | \|
 
@@ -39,35 +42,43 @@ Examples:
 
 ### Direct call:
 
-    ``[!AddHeaderfiles?addcode=`/manager/media/script/mootools/mootools.js;/assets/js/slimbox.js|end;/assets/css/slimbox.css;/assets/css/test.css|print`!]``
+```
+[!AddHeaderfiles?addcode=`/assets/js/jquery.js;/assets/js/colorbox.js|end;/assets/css/colorbox.css;/assets/css/test.css|print`!]
+```
 
 shows:
 
-    `...
-        <script type="text/javascript" src="/manager/media/script/mootools/mootools.js"></script>
-        <link rel="stylesheet" type="text/css" href="/assets/css/slimbox.css" media="screen, tv, projection" />
-        <link rel="stylesheet" type="text/css" href="/assets/css/test.css" media="print" />
-    </head>
-    ...
-        <script type="text/javascript" src="/assets/js/slimbox.js"></script>
-    </body>`
+```html
+...
+    <script type="text/javascript" src="/assets/js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="/assets/css/colorbox.css" media="screen, tv, projection" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/test.css" media="print" />
+</head>
+...
+    <script type="text/javascript" src="/assets/js/colorbox.js"></script>
+</body>
+```
 
 ### Chunk call:
 
-Fill a chunk (i.e. 'headerSlimbox') by:
+Fill a chunk (i.e. 'headerColorbox') by:
 
-    `/assets/js/mootools.js;/assets/js/slimbox.js;/assets/css/slimbox.css`
+```
+/assets/js/jquery.js;/assets/js/colorbox.js|end;/assets/css/colorbox.css
+```
 
 and call it like this:
 
-    ``[!AddHeaderfiles?addcode=`headerSlimbox`!]``
+```
+[!AddHeaderfiles?addcode=`headerColorbox`!]
+```
 
-Parts of the addcode parameterchain could point to chunks too (recursive).
-These chunks should contain the complete `<style>...</style>` or
-`<script>...</script>` code.
+Parts of the addcode parameterchain could point to chunks too (recursive). The parts of the cunks that are not pointing to other chunks ot to files/uri should contain the complete `<style>...</style>` or `<script>...</script>` code.
 
-    ``[!AddHeaderfiles?addcode=`headerSlimbox;/assets/css/test.css|print`!]`
+```
+[!AddHeaderfiles?addcode=`headerColorbox;/assets/css/test.css|print`!]
+```
 
 Notes:
 --------------------------------------------------------------------------------
-1. If you want to insert external files with url parameters *directly* in the snippet call some signs have to be masked. `?` has to be masked as `!q!`. `=` has to be masked as `!eq!`. `&` has to be masked as `!and!`. They don't have to be masked chunks.
+1. If you want to insert external files with url parameters *directly* in the snippet call, some chars have to be masked. `?` has to be masked as `!q!`. `=` has to be masked as `!eq!`. `&` has to be masked as `!and!`. The chars don't have to be masked in chunks.

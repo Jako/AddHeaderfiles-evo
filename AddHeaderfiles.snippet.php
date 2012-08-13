@@ -13,9 +13,10 @@
  * &addcode - name(s) of external file(s) or chunkname(s) separated by semicolon
  * these external files can have a position setting or media type
  * separated by pipe
- * '?' in the file url have to be masked as '!q!'
- * '=' in the file url have to be masked as '!eq!'
- * '&' in the file url have to be masked as '!and!'
+ * In direct snippet call some uri chars have to be masked
+ * '?' has to be masked as '!q!'
+ * '=' has to be masked as '!eq!'
+ * '&' has to be masked as '!and!'
  * &sep -     separator for files/chunknames
  * &sepmed -  seperator for media type or script position
  */
@@ -50,27 +51,29 @@ if (!function_exists('AddHeaderfiles')) {
 			// unmask masked url parameters
 			$part = str_replace(array('!q!', '!eq!', '!and!'), array('?', '=', '&'), $part);
 			$part = explode($sepmed, trim($part), 2);
-			if ($chunk = $modx->getChunk($part[0])) {
+			$chunk = $modx->getChunk($part[0]);
+			if ($chunk) {
 				// part of the parameterchain is a chunkname
 				$part[0] = AddHeaderfiles($chunk, $sep, $sepmed, $mediadefault);
 				if (strpos(strtolower($part[0]), '<style') !== false) {
 					$modx->regClientCSS($part[0]);
 				} else {
-					if ($part[1] != 'end') {
-						$modx->regClientStartupScript($part[0]);
-					} else {
+					if (isset($part[1]) && $part[1] == 'end') {
 						$modx->regClientScript($part[0]);
+					} else {
+						$modx->regClientStartupScript($part[0]);
 					}
 				}
 			} else {
 				// otherwhise it is treated as a filename
 				if (substr($part[0], -4) == '.css') {
-					$modx->regClientCSS($part[0], (isset($part[1]) ? $part[1] : $mediadefault));
+					$media = isset($part[1]) ? $part[1] : $mediadefault;
+					$modx->regClientCSS($part[0], $media);
 				} else {
-					if ($part[1] != 'end') {
-						$modx->regClientStartupScript($part[0]);
-					} else {
+					if (isset($part[1]) && $part[1] == 'end') {
 						$modx->regClientScript($part[0]);
+					} else {
+						$modx->regClientStartupScript($part[0]);
 					}
 				}
 			}
@@ -87,5 +90,5 @@ if ($addcode != '') {
 		$modx->regClientStartupScript($addcode);
 	}
 }
-return "";
+return '';
 ?>
