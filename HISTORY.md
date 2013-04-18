@@ -19,3 +19,5 @@ History
     - mediadefault as snippet property
 - 0.4.2
     - masked url parameters
+- 0.4.3
+    - bugfix for conditional comments

@@ -4,7 +4,7 @@
  * Adds CSS or JS in a document (at the end of the head or the end of the body)
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
- * Version 0.4.2 (4. Juni 2012)
+ * Version 0.4.3 (17. April 2013)
  * Authors: Jako and Mithrandir
  * See http://www.modxcms.de/forum/comments.php?DiscussionID=926&page=1#Item_4
  * and following posts for details
@@ -34,7 +34,7 @@ if (!function_exists('AddHeaderfiles')) {
 	function AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault) {
 		global $modx;
 
-		if ((strpos(strtolower($addcode), '<script') !== false) || (strpos(strtolower($addcode), '<style') !== false)) {
+		if ((strpos(strtolower($addcode), '<script') !== FALSE) || (strpos(strtolower($addcode), '<style') !== FALSE) || (strpos(strtolower($addcode), '<!--') !== FALSE)) {
 			if (class_exists('PHxParser')) {
 				$PHx = new PHxParser();
 				$addcode = $PHx->Parse($addcode);
@@ -55,26 +55,31 @@ if (!function_exists('AddHeaderfiles')) {
 			if ($chunk) {
 				// part of the parameterchain is a chunkname
 				$part[0] = AddHeaderfiles($chunk, $sep, $sepmed, $mediadefault);
-				if (strpos(strtolower($part[0]), '<style') !== false) {
-					$modx->regClientCSS($part[0]);
-				} else {
-					if (isset($part[1]) && $part[1] == 'end') {
-						$modx->regClientScript($part[0]);
-					} else {
-						$modx->regClientStartupScript($part[0]);
-					}
+				$conditional = (strpos(strtolower($part[0]), '<!--') !== FALSE);
+				$style = (strpos(strtolower($part[0]), '<style') !== FALSE);
+				$startup = !(isset($part[1]) && $part[1] == 'end');
+				switch (TRUE) {
+					case ($conditional):
+						$modx->regClientScript($part[0], TRUE, $startup);
+						break;
+					case ($style):
+						$modx->regClientScript($part[0], TRUE, TRUE);
+						break;
+					default:
+						$modx->regClientScript($part[0], FALSE, $startup);
+						break;
 				}
 			} else {
 				// otherwhise it is treated as a filename
-				if (substr($part[0], -4) == '.css') {
-					$media = isset($part[1]) ? $part[1] : $mediadefault;
-					$modx->regClientCSS($part[0], $media);
-				} else {
-					if (isset($part[1]) && $part[1] == 'end') {
-						$modx->regClientScript($part[0]);
-					} else {
-						$modx->regClientStartupScript($part[0]);
-					}
+				$style = (substr(trim($part[0]), -4) == '.css');
+				$startup = !(isset($part[1]) && $part[1] == 'end');
+				switch (TRUE) {
+					case ($style):
+						$modx->regClientCSS($part[0], (isset($part[1]) ? $part[1] : $mediadefault));
+						break;
+					default:
+						$modx->regClientScript($part[0], FALSE, $startup);
+						break;
 				}
 			}
 		}
@@ -84,7 +89,7 @@ if (!function_exists('AddHeaderfiles')) {
 
 if ($addcode != '') {
 	$addcode = AddHeaderfiles($addcode, $sep, $sepmed, $mediadefault);
-	if (strpos(strtolower($addcode), '<style') !== false) {
+	if (strpos(strtolower($addcode), '<style') !== FALSE) {
 		$modx->regClientCSS($addcode);
 	} else {
 		$modx->regClientStartupScript($addcode);
