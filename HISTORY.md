@@ -21,3 +21,5 @@ History
     - masked url parameters
 - 0.4.3
     - bugfix for conditional comments
+- 0.4.4
+    - better external css file detection

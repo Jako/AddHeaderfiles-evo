@@ -4,7 +4,7 @@
  * Adds CSS or JS in a document (at the end of the head or the end of the body)
  * License GPL
  * Based upon: http://www.partout.info/css_modx.html
- * Version 0.4.3 (17. April 2013)
+ * Version 0.4.4 (07. May 2013)
  * Authors: Jako and Mithrandir
  * See http://www.modxcms.de/forum/comments.php?DiscussionID=926&page=1#Item_4
  * and following posts for details
@@ -71,7 +71,7 @@ if (!function_exists('AddHeaderfiles')) {
 				}
 			} else {
 				// otherwhise it is treated as a filename
-				$style = (substr(trim($part[0]), -4) == '.css');
+				$style = ((substr(trim($part[0]), -4) == '.css') || (strpos($part[0], '/css?') !== FALSE));
 				$startup = !(isset($part[1]) && $part[1] == 'end');
 				switch (TRUE) {
 					case ($style):
