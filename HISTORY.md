@@ -8,6 +8,7 @@ History
     - modifications by Mithrandir (media, use chunknames in addcode parameter)
 - 0.2.x
     - bugfixes
+
 - 0.3   
     - Use chunknames in chunks
 - 0.3.x 
