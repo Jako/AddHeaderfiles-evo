@@ -24,3 +24,5 @@ History
     - bugfix for conditional comments
 - 0.4.4
     - better external css file detection
+- 0.4.5
+    - install set for http://extras.evolution-cms.com/
