@@ -1,4 +1,4 @@
-AddHeaderfiles snippet
+AddHeaderfiles
 ================================================================================
 
 Adds CSS or JS in a document (at the end of the head or the end of the body)
