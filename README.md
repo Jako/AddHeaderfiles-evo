@@ -1,9 +1,8 @@
-#THIS PROJECT IS DEPRECATED
+# THIS PROJECT IS DEPRECATED
 
 AddHeaderfiles is not maintained anymore. It maybe does not work in Evolution 1.1 anymore. Please fork it and bring it back to life, if you need it.
 
-AddHeaderfiles
-================================================================================
+# AddHeaderfiles
 
 Adds CSS or JS in a document (at the end of the head or the end of the body)
 for the MODX Evolution content management framework
